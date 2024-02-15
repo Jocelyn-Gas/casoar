@@ -1,0 +1,26 @@
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core"]
+
+[tool.poetry]
+authors = ["Jocelyn Gas <jocelyn.gas@dillygence.com>"]
+description = "Git hooks made easy with local dev dependencies"
+license = "MIT License"
+name = "captain-hook"
+packages = [{from = "src", include = "captain_hook"}]
+readme = "README.md"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+pydantic = "^2.6.1"
+python = "^3.10"
+toml = "^0.10.2"
+typer = "^0.9.0"
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+ruff = "^0.2.1"
+toml-sort = "^0.23.1"

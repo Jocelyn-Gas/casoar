@@ -1,0 +1,7 @@
+{
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "editor.formatOnSave": true,
+    "files.exclude": {
+        "**/.git": false,
+    }
+}
