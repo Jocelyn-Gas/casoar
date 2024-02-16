@@ -7,15 +7,21 @@ authors = ["Jocelyn Gas <jocelyn.gas@dillygence.com>"]
 description = "Git hooks made easy with local dev dependencies"
 license = "MIT License"
 name = "captain-hook"
-packages = [{from = "src", include = "captain_hook"}]
+packages = [{ from = "src", include = "captain_hook" }]
 readme = "README.md"
 version = "0.1.0"
 
 [tool.poetry.dependencies]
+typer = "^0.9.0"
 pydantic = "^2.6.1"
 python = "^3.10"
 toml = "^0.10.2"
-typer = "^0.9.0"
+pyyaml = "^6.0.1"
+rich = "^13.7.0"
+tomlkit = "^0.12.3"
+
+[tool.poetry.scripts]
+captain-hook = "src.captain_hook.cli:app"
 
 [tool.poetry.group.dev]
 optional = true
