@@ -30,3 +30,22 @@ optional = true
 pytest = "^8.0.0"
 ruff = "^0.2.1"
 toml-sort = "^0.23.1"
+commitizen = "^3.14.1"
+
+[tool.casoar]
+virtual_env = ".venv"
+
+[[tool.casoar.pre-commit]]
+command = "poetry run ruff format --check"
+silent = true
+message = "Python files not formatted correctly."
+
+[[tool.casoar.pre-commit]]
+command = "poetry run ruff"
+silent = true
+message = "Please ensure your code is linted before commiting"
+
+[[tool.casoar.commit-msg]]
+command = "poetry run cz check"
+silent = true
+message = "Please follow the commit message convention"
