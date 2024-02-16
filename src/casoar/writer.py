@@ -3,7 +3,7 @@ from pathlib import Path
 
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from captain_hook.models import Hooks
+from casoar.models import Hooks
 
 
 def write_hooks(hooks: Hooks, hooks_folder: Path | str = Path("./git/hooks")) -> None:

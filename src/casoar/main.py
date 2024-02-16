@@ -3,8 +3,8 @@ from pathlib import Path
 import tomlkit
 import yaml
 
-from captain_hook.models import Command, Hooks
-from captain_hook.writer import write_hooks
+from casoar.models import Command, Hooks
+from casoar.writer import write_hooks
 
 
 class NoConfigFoundError(Exception):
@@ -13,31 +13,6 @@ class NoConfigFoundError(Exception):
 
 class TooManyConfigFilesError(Exception):
     pass
-
-
-# if __name__ == "__main__":
-#     config = Hooks(
-#         virtual_env=".venv",
-#         pre_commit=[
-#             Command(
-#                 command="echo 'Hello, world!'",
-#                 silent=True,
-#                 message="Hello, world! failed",
-#             ),
-#             Command(command="echo 'Hello, Universe!'"),
-#         ],
-#     )
-#     with open("pyproject.toml", "r") as toml_file:
-#         pyproject_data = toml.load(toml_file)
-
-#     pyproject_data["tool"]["captain-hook"] = config.model_dump()
-#     print(config.model_dump_json(indent=2))
-#     with open("pyproject.toml", "w") as toml_file:
-#         toml.dump(pyproject_data, toml_file)
-
-#     write_hooks(config, hooks_folder=".git/hooks")
-#     # for hook in config.hooks:
-#     # write_hook(hook, config.virtualenv)
 
 
 def read_config() -> Hooks:
@@ -78,4 +53,4 @@ def create_sample_config(path: Path):
         yaml.safe_dump(
             config.model_dump(by_alias=True, exclude_unset=True), config_file
         )
-    print(toml.dumps(config.model_dump()))
+    print(tomlkit.dumps(config.model_dump()))

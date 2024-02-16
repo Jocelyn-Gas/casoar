@@ -6,8 +6,8 @@ requires = ["poetry-core"]
 authors = ["Jocelyn Gas <jocelyn.gas@dillygence.com>"]
 description = "Git hooks made easy with local dev dependencies"
 license = "MIT License"
-name = "captain-hook"
-packages = [{ from = "src", include = "captain_hook" }]
+name = "casoar"
+packages = [{ from = "src", include = "casoar" }]
 readme = "README.md"
 version = "0.1.0"
 
@@ -21,7 +21,7 @@ rich = "^13.7.0"
 tomlkit = "^0.12.3"
 
 [tool.poetry.scripts]
-captain-hook = "src.captain_hook.cli:app"
+casoar = "src.casoar.cli:app"
 
 [tool.poetry.group.dev]
 optional = true

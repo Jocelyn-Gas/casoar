@@ -1,6 +1,6 @@
 from enum import Enum
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated
 
 import tomlkit
 import yaml
@@ -8,14 +8,14 @@ from rich import print
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from typer import Argument, Option, Typer
 
-from captain_hook.main import (
+from casoar.main import (
     NoConfigFoundError,
     TooManyConfigFilesError,
     create_sample_config,
     read_config,
 )
-from captain_hook.models import Hooks
-from captain_hook.writer import write_hooks
+from casoar.models import Hooks
+from casoar.writer import write_hooks
 
 app = Typer()
 
@@ -79,16 +79,20 @@ def init(
             pyproject_data = tomlkit.loads(pyproject_path.read_text())
 
             if "tool" not in pyproject_data:
-                pyproject_data["tool"] = {}
+                pyproject_data["tool"] = tomlkit.table()
 
-            if "captain-hook" in pyproject_data["tool"].keys():
+            if "captain-hook" in pyproject_data["tool"]:
                 print(
                     f"[red]Error: Configuration for captain-hook already exists in {config_file}[/red]"
                 )
                 raise SystemExit(1)
-            # pyproject_data.add("tool").add(
-            # "captain-hook", config.model_dump(by_alias=True, exclude_unset=True)
-            # )
+            sample = Hooks.get_sample()
+            pyproject_data["tool"]["captain-hook"] = tomlkit.table()
+            for k , v in sample.dict(by_alias=True, exclude_unset=True).items():
+                pyproject_data["tool"]["captain-hook"][k] = v
+
+            # pyproject_data.get("tool")["captain-hook"].add("virtual_env", ".venv")
+
             with open(pyproject_path, "wt") as file:
                 tomlkit.dump(pyproject_data, file)
         case ConfigFileName.YAML:
