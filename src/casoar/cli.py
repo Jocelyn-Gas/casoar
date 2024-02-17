@@ -11,7 +11,6 @@ from typer import Argument, Option, Typer
 from casoar.main import (
     NoConfigFoundError,
     TooManyConfigFilesError,
-    create_sample_config,
     read_config,
 )
 from casoar.models import Hooks
@@ -22,7 +21,7 @@ app = Typer()
 
 class ConfigFileName(str, Enum):
     TOML = "pyproject.toml"
-    YAML = ".captain-hook.yml"
+    YAML = ".casoar.yml"
 
 
 @app.command()
@@ -31,13 +30,13 @@ def install():
         config = read_config()
         write_hooks(config, hooks_folder=".git/hooks")
     except NoConfigFoundError:
-        print("[red]Error: No configuration found for [b]captain-hook [/red]")
+        print("[red]Error: No configuration found for [b]casoar [/red]")
         print(
-            "[yellow]Hint:[/yellow] Run [green]captain-hook init[/green] to create a configuration file"
+            "[yellow]Hint:[/yellow] Run [green]casoar init[/green] to create a configuration file"
         )
     except TooManyConfigFilesError:
         print(
-            "[red]Error: Both .captain-hook.yml and pyproject.toml have configuration for captain-hook[/red]"
+            "[red]Error: Both .casoar.yml and pyproject.toml have configuration for casoar[/red]"
         )
         print(
             "[yellow]Hint:[/yellow] Remove one of the configuration files to fix this error"
@@ -58,9 +57,10 @@ def init(
         )
         raise SystemExit(1)
 
-    elif custom_config_path.exists and force:
+    elif custom_config_path.exists() and force:
         custom_config_path.unlink()
-    config = Hooks.get_sample()
+
+    config = Hooks.opiniated_config()
 
     match config_file:
         case ConfigFileName.TOML:
@@ -81,17 +81,17 @@ def init(
             if "tool" not in pyproject_data:
                 pyproject_data["tool"] = tomlkit.table()
 
-            if "captain-hook" in pyproject_data["tool"]:
+            if "casoar" in pyproject_data["tool"] and not force:
                 print(
-                    f"[red]Error: Configuration for captain-hook already exists in {config_file}[/red]"
+                    f"[red]Error: Configuration for casoar already exists in {config_file.value}[/red]"
                 )
                 raise SystemExit(1)
-            sample = Hooks.get_sample()
-            pyproject_data["tool"]["captain-hook"] = tomlkit.table()
-            for k , v in sample.dict(by_alias=True, exclude_unset=True).items():
-                pyproject_data["tool"]["captain-hook"][k] = v
+            sample = Hooks.opiniated_config()
+            pyproject_data["tool"]["casoar"] = tomlkit.table()
+            for k, v in sample.model_dump(by_alias=True, exclude_unset=True).items():
+                pyproject_data["tool"]["casoar"][k] = v
 
-            # pyproject_data.get("tool")["captain-hook"].add("virtual_env", ".venv")
+            # pyproject_data.get("tool")["casoar"].add("virtual_env", ".venv")
 
             with open(pyproject_path, "wt") as file:
                 tomlkit.dump(pyproject_data, file)

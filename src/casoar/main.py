@@ -4,7 +4,6 @@ import tomlkit
 import yaml
 
 from casoar.models import Command, Hooks
-from casoar.writer import write_hooks
 
 
 class NoConfigFoundError(Exception):
