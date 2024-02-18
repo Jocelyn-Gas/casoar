@@ -13,6 +13,7 @@ class NoConfigFoundError(Exception):
 class TooManyConfigFilesError(Exception):
     pass
 
+
 def read_config() -> Hooks:
     config_file = Path("./.casoar.yml")
     pyproject_file = Path("./pyproject.toml")
