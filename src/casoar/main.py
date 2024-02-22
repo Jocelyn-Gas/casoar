@@ -1,9 +1,8 @@
 from pathlib import Path
 
 import tomlkit
-import yaml
 
-from casoar.models import Command, Hooks
+from casoar.models import Hooks
 
 
 class NoConfigFoundError(Exception):
@@ -15,7 +14,7 @@ class TooManyConfigFilesError(Exception):
 
 
 def read_config() -> Hooks:
-    config_file = Path("./.casoar.yml")
+    config_file = Path("./.casoar.toml")
     pyproject_file = Path("./pyproject.toml")
     pyproject_data = tomlkit.loads(pyproject_file.read_text())
 
@@ -29,27 +28,11 @@ def read_config() -> Hooks:
     if "casoar" in d.keys():
         if config_file.exists():
             raise TooManyConfigFilesError(
-                "Both .casoar.yml and pyproject.toml have configuration for casoar"
+                "Both .casoar.toml and pyproject.toml have configuration for casoar"
             )
         return Hooks.model_validate(pyproject_data["tool"]["casoar"])
 
     if config_file.exists():
-        return Hooks.model_validate(yaml.safe_load(config_file.read_text()))
+        return Hooks.model_validate(tomlkit.loads(config_file.read_text()))
 
     raise NoConfigFoundError("No configuration found for casoar")
-
-
-def create_sample_config(path: Path):
-    config = Hooks(
-        virtual_env=".venv",
-        pre_commit=[
-            Command(
-                command="echo 'Hello, world!'",
-            ),
-        ],
-    )
-    with open(path, "w") as config_file:
-        yaml.safe_dump(
-            config.model_dump(by_alias=True, exclude_unset=True), config_file
-        )
-    print(tomlkit.dumps(config.model_dump()))

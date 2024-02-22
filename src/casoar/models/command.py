@@ -15,12 +15,14 @@ class Command(BaseModel):
             return f"{self.command} >/dev/null 2>&1"
 
         if self.message is not None:
-            return f"""command_output=$({self.command} 2>&1)
-            command_exit_code=$?
-            if [ $command_exit_code -ne 0 ]; then
-                echo '{self.message}'
-                echo "$command_output"
-                exit 1
-            fi"""
+            return (
+                f"command_output=$({self.command} 2>&1)\n"
+                "command_exit_code=$?\n"
+                "if [ $command_exit_code -ne 0 ]; then\n"
+                f"    echo '{self.message}'\n"
+                '    echo "$command_output"\n'
+                "    exit 1\n"
+                "fi"
+            )
 
         return self.command

@@ -15,8 +15,6 @@ version = "0.1.0"
 typer = "^0.9.0"
 pydantic = "^2.6.1"
 python = "^3.10"
-toml = "^0.10.2"
-pyyaml = "^6.0.1"
 rich = "^13.7.0"
 tomlkit = "^0.12.3"
 
@@ -36,16 +34,13 @@ commitizen = "^3.14.1"
 virtual_env = ".venv"
 
 [[tool.casoar.pre-commit]]
-command = "poetry run ruff format --check"
-silent = true
-message = "Python files not formatted correctly."
+command = "ruff format --check --exclude=\"**/.venv/*\""
+message = "Please format your code"
 
 [[tool.casoar.pre-commit]]
-command = "poetry run ruff"
-silent = true
-message = "Please ensure your code is linted before commiting"
+command = "ruff check --exclude=\"**/.venv/*\""
+message = "Please lint your code"
 
 [[tool.casoar.commit-msg]]
-command = "poetry run cz check"
-silent = true
-message = "Please follow the commit message convention"
+command = "cz check --commit-msg-file $1"
+message = "Please check your commit message"
