@@ -29,7 +29,18 @@ class Hooks(BaseModel):
             virtual_env=Path(".venv"),
             pre_commit=[
                 Command(
-                    command="echo 'Hello, world!'",
+                    command='ruff format --check --exclude="**/.venv/*"',
+                    message="Please format your code",
+                ),
+                Command(
+                    command='ruff check --exclude="**/.venv/*"',
+                    message="Please lint your code",
+                ),
+            ],
+            commit_msg=[
+                Command(
+                    command="cz check --commit-msg-file $1",
+                    message="Please check your commit message",
                 ),
             ],
         )
