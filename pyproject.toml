@@ -9,7 +9,7 @@ license = "MIT License"
 name = "casoar"
 packages = [{ from = "src", include = "casoar" }]
 readme = "README.md"
-version = "0.1.1"
+version = "0.1.2"
 
 [tool.poetry.dependencies]
 typer = "^0.9.0"
@@ -19,7 +19,7 @@ rich = "^13.7.0"
 tomlkit = "^0.12.3"
 
 [tool.poetry.scripts]
-casoar = "src.casoar.cli:app"
+casoar = "casoar.cli:app"
 
 [tool.poetry.group.dev]
 optional = true
